@@ -4,15 +4,15 @@ CLASS_PATH="src/main/resources/jade.jar:target/lab3-1.0.jar"
 CONTAINER_NAME="main"
 GUI="-gui"
 HOST="localhost"
-PORT="9017"
+PORT="9040"
 LOCAL_HOST="localhost"
-LOCAL_PORT="9017"
+LOCAL_PORT="9040"
 GUI='-gui'
 
-ARGS=( "9018" "9019" "9020" )
+ARGS=( "9041" "9042" "9043" )
 ARGS2=( "Alicja" "Bogdan" "Cecylia" )
 
-# mvn     package
+mvn     package
 
 #Test classes
 java    "-cp"\

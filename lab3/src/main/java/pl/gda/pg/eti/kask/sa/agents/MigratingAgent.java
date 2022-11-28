@@ -15,9 +15,8 @@ import jade.domain.mobility.MobilityOntology;
 import jade.lang.acl.ACLMessage;
 import lombok.Getter;
 import lombok.Setter;
-import pl.gda.pg.eti.kask.sa.behaviours.RequestAgentsListBehaviour;
+import pl.gda.pg.eti.kask.sa.behaviours.MigratingBehaviour;
 import pl.gda.pg.eti.kask.sa.behaviours.RequestContainersListBehaviour;
-import pl.gda.pg.eti.kask.sa.data.WelcomingMetadata;
 
 
 public class MigratingAgent extends Agent {
@@ -28,9 +27,6 @@ public class MigratingAgent extends Agent {
     @Setter
     @Getter
     private int jumpSeconds;
-    
-    @Getter
-    private Map<AID, WelcomingMetadata> knownAgents;
 
     public MigratingAgent() {
     }
@@ -41,18 +37,8 @@ public class MigratingAgent extends Agent {
         ContentManager cm = getContentManager();
         cm.registerLanguage(new SLCodec());
         cm.registerOntology(MobilityOntology.getInstance());
-
-        // Set the jump seconds accordingly.
-        Object[] args = getArguments();
-        if (args != null && args.length > 0) {
-           jumpSeconds = Integer.parseInt((String) args[0]);
-        } else {
-            Random rng = new Random();
-            jumpSeconds = 2 + rng.nextInt(6);
-        }
-
-        knownAgents = new HashMap<AID, WelcomingMetadata>();
         this.addBehaviour(new RequestContainersListBehaviour(this));
+        this.addBehaviour(new MigratingBehaviour(this));
     }
 
     @Override
@@ -63,7 +49,11 @@ public class MigratingAgent extends Agent {
         cm.registerLanguage(new SLCodec());
         cm.registerOntology(MobilityOntology.getInstance());
 
-        this.addBehaviour(new RequestAgentsListBehaviour(this));
+        try{
+            Thread.sleep(3000);
+        } catch (InterruptedException e){
+
+        }
     }
 
     @Override
@@ -72,29 +62,4 @@ public class MigratingAgent extends Agent {
         super.beforeMove();
     }
 
-    // Try welcoming a given agent.
-    public void tryWelcoming(AID agent) {
-        if (!knownAgents.containsKey(agent)) return;
-        WelcomingMetadata metadata = knownAgents.get(agent);
-        if (!metadata.isMigratingAgent) return;
-
-        if (metadata.welcomeCooldown <= 0) {
-            if (!metadata.welcomedInLocations.contains(here())) {
-                metadata.welcomedInLocations.add(here());
-                metadata.welcomeCooldown = 10;
-
-                try {
-                    ACLMessage welcomeMsg = new ACLMessage(ACLMessage.INFORM);
-                    welcomeMsg.setContent("Hello from the kingdom of " + here().getName() + "!");
-                    welcomeMsg.addReceiver(agent);
-                    send(welcomeMsg);
-                } catch (Exception e) {
-                    Logger.getLogger(getClass().getName()).warning("Failed to send a message to " + agent.getName());
-                    Logger.getLogger(getClass().getName()).warning(e.getMessage());
-                }
-            }
-        } else metadata.welcomeCooldown -= 1;
-
-        knownAgents.put(agent, metadata);
-    }
 }
