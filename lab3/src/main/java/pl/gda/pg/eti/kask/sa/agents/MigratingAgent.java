@@ -18,15 +18,10 @@ import lombok.Setter;
 import pl.gda.pg.eti.kask.sa.behaviours.MigratingBehaviour;
 import pl.gda.pg.eti.kask.sa.behaviours.RequestContainersListBehaviour;
 
-
 public class MigratingAgent extends Agent {
     @Setter
     @Getter
     private List<Location> locations;
-    
-    @Setter
-    @Getter
-    private int jumpSeconds;
 
     public MigratingAgent() {
     }
@@ -49,9 +44,9 @@ public class MigratingAgent extends Agent {
         cm.registerLanguage(new SLCodec());
         cm.registerOntology(MobilityOntology.getInstance());
 
-        try{
+        try {
             Thread.sleep(3000);
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
     }
@@ -61,5 +56,4 @@ public class MigratingAgent extends Agent {
         // Make sure the location is still there?
         super.beforeMove();
     }
-
 }

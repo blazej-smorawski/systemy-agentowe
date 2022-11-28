@@ -28,7 +28,7 @@ public class RequestContainersListBehaviour extends OneShotBehaviour {
         Action action = new Action(myAgent.getAMS(), query);
 
         String conversationId = UUID.randomUUID().toString();
-        
+
         ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
         request.setLanguage(new SLCodec().getName());
         request.setOntology(MobilityOntology.getInstance().getName());
@@ -40,7 +40,7 @@ public class RequestContainersListBehaviour extends OneShotBehaviour {
             myAgent.send(request);
             myAgent.addBehaviour(new ReceiveContainersListBehaviour(myAgent, conversationId));
         } catch (Codec.CodecException | OntologyException ex) {
-             log.log(Level.WARNING, ex.getMessage(), ex);
+            log.log(Level.WARNING, ex.getMessage(), ex);
         }
     }
 }

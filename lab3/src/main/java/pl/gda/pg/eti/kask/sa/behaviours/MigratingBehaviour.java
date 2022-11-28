@@ -11,7 +11,7 @@ import java.util.Random;
 public class MigratingBehaviour extends CyclicBehaviour {
 
     protected final MigratingAgent myAgent;
-    
+
     public MigratingBehaviour(MigratingAgent agent) {
         super(agent);
         myAgent = agent;
@@ -20,13 +20,13 @@ public class MigratingBehaviour extends CyclicBehaviour {
     @Override
     public void action() {
         List<Location> locations = myAgent.getLocations();
-        if(locations != null) {
+        if (locations != null) {
             Random rng = new Random();
             try {
                 int locationIndex = rng.nextInt(locations.size());
 
                 Location location = locations.get(locationIndex);
-                //locations.remove(location);
+                // locations.remove(location);
                 myAgent.doMove(location);
             } catch (IllegalArgumentException e) {
 
