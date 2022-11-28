@@ -1,4 +1,4 @@
-package main.java.pl.gda.pg.eti.kask.sa;
+package pl.gda.pg.eti.kask.sa;
 
 public class main {
     public static void main(String[] args){

@@ -4,17 +4,20 @@ CLASS_PATH="src/main/resources/jade.jar:target/lab3-1.0.jar"
 CONTAINER_NAME="main"
 GUI="-gui"
 HOST="localhost"
-PORT="9000"
+PORT="9017"
 LOCAL_HOST="localhost"
-LOCAL_PORT="9000"
+LOCAL_PORT="9017"
 GUI='-gui'
 
-mvn     package
+ARGS=( "9018" "9019" "9020" )
+ARGS2=( "Alicja" "Bogdan" "Cecylia" )
 
-# Test classes
+# mvn     package
+
+#Test classes
 java    "-cp"\
         "$CLASS_PATH"\
-        "main.java.pl.gda.pg.eti.kask.sa.main"\
+        "pl.gda.pg.eti.kask.sa.main"\
 
 java    "-cp"\
         "$CLASS_PATH"\
@@ -25,3 +28,20 @@ java    "-cp"\
         "-port" $PORT\
         "-local-port" $LOCAL_PORT\
         "$GUI"\
+        &\
+
+sleep   1s
+
+for i in "${!ARGS[@]}"; do
+        printf "CONTAINER: %s : %s\n" "${ARGS[i]}" "${ARGS[i]}"
+        java        "-cp"\
+                "$CLASS_PATH"\
+                "jade.Boot"\
+                "-container-name" ${ARGS2[i]} \
+                "-host" $HOST\
+                "-local-host"  $LOCAL_HOST\
+                "-port" $PORT\
+                "-local-port" ${ARGS[i]}\
+                "-container"\
+                &\
+done
